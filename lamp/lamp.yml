@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: install apache2
+    package:
+      name: "{{ pack_name }}"
+      update_cache: yes
+      state: present
+    notify:
+     - restart service
+  - name: install php
+    package:
+      name: "{{ php_packages }}"
+      state: present
+    notify:
+      - restart service
+  handlers:
+    - name: restart service
+      service:
+        name: "{{ pack_name }}"
+        enabled: yes
+        state: restarted
